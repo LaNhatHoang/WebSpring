@@ -30,7 +30,10 @@ public class User implements UserDetails {
     private Date timeLock;
 
     @OneToOne(mappedBy = "user")
-    private Token token;
+    private AccessToken accessToken;
+
+    @OneToOne(mappedBy = "user")
+    private RefreshToken refreshToken;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

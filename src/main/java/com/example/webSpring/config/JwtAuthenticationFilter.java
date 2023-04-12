@@ -1,7 +1,7 @@
 package com.example.webSpring.config;
 
-import com.example.webSpring.entity.Token;
-import com.example.webSpring.repository.TokenRepository;
+import com.example.webSpring.entity.AccessToken;
+import com.example.webSpring.repository.AccessTokenRepository;
 import com.example.webSpring.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,7 +23,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
-    private final TokenRepository tokenRepository;
+    private final AccessTokenRepository accessTokenRepository;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String authHeader =request.getHeader("Authorization");
@@ -37,8 +37,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         userEmail = jwtService.extractUsername(jwt);
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-            Token token = tokenRepository.findByToken(jwt);
-            if (userEmail != null && token != null && token.getTimeExpire().getTime() > System.currentTimeMillis()) {
+            AccessToken accessToken = accessTokenRepository.findByAccessToken(jwt);
+            if (userEmail != null && accessToken != null && accessToken.getTimeExpire().getTime() > System.currentTimeMillis()) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
@@ -50,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
             else{
-                System.out.println("Token invalid");
+                System.out.println("::Token invalid");
             }
         }
         filterChain.doFilter(request, response);

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class demoController {
-    @GetMapping("/users/all")
+    @GetMapping("/user/all")
     public String home(){
         return "admin";
     }

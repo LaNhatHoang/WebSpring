@@ -16,7 +16,9 @@ public class AuthenticationResponse {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String token;
+    private String accessToken;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String refreshToken;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String role;
 

@@ -1,4 +1,4 @@
-package com.example.webSpring.upload;
+package com.example.webSpring.file;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

@@ -18,8 +18,8 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 public class SecurityConfig {
     private static final String[] ADMIN_URLs = {
             "/user/all",
-            "api/v1/book/add",
-            "api/v1/book/delete/**"
+            "/api/v1/book/add",
+            "/api/v1/book/delete/**"
     };
     private static final String[] USER_URLs = {
             "/api/v1/book/all",
@@ -30,12 +30,12 @@ public class SecurityConfig {
             "/",
             "/api/v1/auth/register",
             "/api/v1/auth/login",
-//            "api/v1/auth/logout",
+            "/api/v1/auth/logout",
+            "/api/v1/auth/refresh",
             "/api/v1/file/**"
     };
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final LogoutHandler logoutHandler;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()

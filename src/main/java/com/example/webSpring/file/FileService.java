@@ -1,5 +1,6 @@
-package com.example.webSpring.upload;
+package com.example.webSpring.file;
 
+import com.example.webSpring.response.FileResponse;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -23,39 +24,38 @@ public class FileService {
         try{
             Files.createDirectories(storageFolder);
         }catch (Exception e){
-            throw new RuntimeException("Connot init storage", e);
+            throw new RuntimeException("Connot init storage");
         }
     }
     private boolean isImageFile(MultipartFile file){
         String fileExtend = FilenameUtils.getExtension(file.getOriginalFilename());
         return Arrays.asList(new String[]{"png", "jpg", "jpeg", "bmp"}).contains(fileExtend.trim().toLowerCase());
     }
-    public String storageFile(MultipartFile file){
+    public FileResponse storageFile(MultipartFile file){
         try{
             if(file.isEmpty()){
-                throw new RuntimeException("Failed to storage empty file");
+                return FileResponse.builder().status(false).message("Failed to storage empty file").build();
             }
             if(!isImageFile(file)){
-                throw new RuntimeException("Not image");
+                return FileResponse.builder().status(false).message("File is not image").build();
             }
             float fileSizeMb = file.getSize()/1_000_000.0f;
-            if(fileSizeMb > 0.5f){
-                throw new RuntimeException("Size file must be <= 5Mb");
+            if(fileSizeMb > 0.4f){
+                return FileResponse.builder().status(false).message("Size image must be <= 4Mb").build();
             }
             String fileExtend = FilenameUtils.getExtension(file.getOriginalFilename());
             String generatedFileName = UUID.randomUUID().toString().replace("-", "");
             generatedFileName = generatedFileName+"."+fileExtend;
-            Path destinationFilePath = storageFolder.resolve(Paths.get(generatedFileName))
-                    .normalize().toAbsolutePath();
+            Path destinationFilePath = storageFolder.resolve(Paths.get(generatedFileName)).normalize().toAbsolutePath();
             if(!destinationFilePath.getParent().equals(storageFolder.toAbsolutePath())){
                 throw new RuntimeException("Cannot store file outside current directory");
             }
             try(InputStream inputStream = file.getInputStream()){
                 Files.copy(inputStream, destinationFilePath, StandardCopyOption.REPLACE_EXISTING);
             }
-            return generatedFileName;
+            return FileResponse.builder().status(true).message("Upload success").nameImage(generatedFileName).build();
         }catch (Exception e){
-            throw new RuntimeException("Failed storage file");
+            return FileResponse.builder().status(false).message("Can not storage image").build();
         }
     }
     public byte[] readFileContent(String fileName){
