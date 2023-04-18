@@ -1,4 +1,4 @@
-package com.example.webSpring.auth;
+package com.example.webSpring.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -15,6 +15,8 @@ public class AuthenticationResponse {
     private boolean status;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Long id;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String accessToken;
     @JsonInclude(JsonInclude.Include.NON_NULL)

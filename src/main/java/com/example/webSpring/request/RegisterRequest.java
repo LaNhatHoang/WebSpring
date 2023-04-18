@@ -1,4 +1,4 @@
-package com.example.webSpring.auth;
+package com.example.webSpring.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
-public class AuthenticationRequest {
+public class RegisterRequest {
+    private String firstname;
+    private String lastname;
     private String email;
     private String password;
 }

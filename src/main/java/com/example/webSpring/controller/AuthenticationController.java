@@ -1,16 +1,14 @@
-package com.example.webSpring.auth;
+package com.example.webSpring.controller;
 
-import com.example.webSpring.entity.AccessToken;
-import com.example.webSpring.entity.RefreshToken;
-import com.example.webSpring.entity.User;
-import com.example.webSpring.repository.AccessTokenRepository;
-import com.example.webSpring.repository.RefreshTokenRepository;
-import jakarta.servlet.http.Cookie;
+
+import com.example.webSpring.request.AuthenticationRequest;
+import com.example.webSpring.service.AuthenticationService;
+import com.example.webSpring.request.RegisterRequest;
+import com.example.webSpring.response.AuthenticationResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

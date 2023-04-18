@@ -24,7 +24,7 @@ public class SecurityConfig {
     private static final String[] USER_URLs = {
             "/api/v1/book/all",
             "/books/all",
-            "/books/book/{id}"
+            "/books/book/{id}",
     };
     private static final String[] PERMIT_URLs = {
             "/",
@@ -32,7 +32,8 @@ public class SecurityConfig {
             "/api/v1/auth/login",
             "/api/v1/auth/logout",
             "/api/v1/auth/refresh",
-            "/api/v1/file/**"
+            "/api/v1/file/**",
+            "/api/v1/book/getall"
     };
     private final AuthenticationProvider authenticationProvider;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;

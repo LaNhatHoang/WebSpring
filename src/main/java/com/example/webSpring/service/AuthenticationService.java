@@ -1,17 +1,19 @@
-package com.example.webSpring.auth;
+package com.example.webSpring.service;
 
 
-
-import com.example.webSpring.entity.RefreshToken;
 import com.example.webSpring.entity.AccessToken;
+import com.example.webSpring.entity.RefreshToken;
 import com.example.webSpring.entity.User;
-import com.example.webSpring.repository.RefreshTokenRepository;
 import com.example.webSpring.repository.AccessTokenRepository;
+import com.example.webSpring.repository.RefreshTokenRepository;
 import com.example.webSpring.repository.UserRepository;
-import com.example.webSpring.service.JwtService;
+import com.example.webSpring.request.AuthenticationRequest;
+import com.example.webSpring.request.RegisterRequest;
+import com.example.webSpring.response.AuthenticationResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -137,6 +139,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .status(true)
                 .message("Login success")
+                .id(user.getId())
                 .accessToken(accessToken)
 //                .refreshToken(refreshToken)
                 .role(user.getRole())
@@ -192,17 +195,21 @@ public class AuthenticationService {
 //                .refreshToken(rfToken)
                 .build();
     }
+    @Transactional
     private void revokeAccessTokens(User user) {
         AccessToken accessToken = accessTokenRepository.findAccessTokenByUserId(user.getId());
         if (accessToken == null)
             return;
         accessTokenRepository.delete(accessToken);
+//        accessTokenRepository.deleteByUserId(user.getId());
     }
+    @Transactional
     private void revokeRefreshTokens(User user) {
         RefreshToken refreshToken = refreshTokenRepository.findRefreshTokenByUserId(user.getId());
         if (refreshToken == null)
             return;
         refreshTokenRepository.delete(refreshToken);
+//        refreshTokenRepository.deleteByUserId(user.getId());
     }
     private void saveAccessToken(User user, String accessToken) {
         AccessToken token = AccessToken.builder()
