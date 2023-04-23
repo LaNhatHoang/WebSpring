@@ -44,12 +44,11 @@ public class AuthenticationService {
         if (theUser != null){
             return AuthenticationResponse
                     .builder().status(false)
-                    .message("A user with " +request.getEmail() +" already exists")
+                    .message("Tài khoản " +request.getEmail() +" đã được đăng ký")
                     .build();
         }
         User user = User.builder()
-                .firstName(request.getFirstname())
-                .lastName(request.getLastname())
+                .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role("USER")
@@ -60,7 +59,7 @@ public class AuthenticationService {
         userRepository.save(user);
         return AuthenticationResponse.builder()
                 .status(true)
-                .message("Register success")
+                .message("Đăng ký thành công")
                 .build();
     }
     public AuthenticationResponse login(AuthenticationRequest request, HttpServletResponse response){
@@ -68,7 +67,7 @@ public class AuthenticationService {
         if(user == null){
             return AuthenticationResponse
                     .builder().status(false)
-                    .message("Username not found").build();
+                    .message("Tài khoản không tồn tại").build();
         }
         if( !passwordEncoder.matches(request.getPassword(), user.getPassword())){
             if(!user.isLocked()){
@@ -138,7 +137,7 @@ public class AuthenticationService {
         response.addCookie(cookie);
         return AuthenticationResponse.builder()
                 .status(true)
-                .message("Login success")
+                .message("Đăng nhập thành công")
                 .id(user.getId())
                 .accessToken(accessToken)
 //                .refreshToken(refreshToken)
@@ -175,7 +174,7 @@ public class AuthenticationService {
         RefreshToken refreshToken = refreshTokenRepository.findByRefreshToken(token);
         if(refreshToken == null || refreshToken.getTimeExpire().getTime() < System.currentTimeMillis()){
             return  AuthenticationResponse.builder()
-                    .status(false).message("Can not Refresh Token").build();
+                    .status(false).message("Không thể Refresh Token").build();
         }
         User user = refreshToken.getUser();
         String acToken = jwtService.generateAccessToken(user);
@@ -201,7 +200,6 @@ public class AuthenticationService {
         if (accessToken == null)
             return;
         accessTokenRepository.delete(accessToken);
-//        accessTokenRepository.deleteByUserId(user.getId());
     }
     @Transactional
     private void revokeRefreshTokens(User user) {
@@ -209,7 +207,6 @@ public class AuthenticationService {
         if (refreshToken == null)
             return;
         refreshTokenRepository.delete(refreshToken);
-//        refreshTokenRepository.deleteByUserId(user.getId());
     }
     private void saveAccessToken(User user, String accessToken) {
         AccessToken token = AccessToken.builder()

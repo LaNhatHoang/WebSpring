@@ -1,10 +1,10 @@
 package com.example.webSpring.entity;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Date;
 
 @Entity
 @Getter
@@ -12,22 +12,20 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Review {
+public class BuyBook {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "text")
-    private String comment;
-    private int star;
+    private Long quantity;
+    private Date timeOrder;
 
     @ManyToOne
-    @JoinColumn()
-    @JsonIncludeProperties(value = {"name"})
+    @JoinColumn
+    @JsonIgnore
     private User user;
 
     @ManyToOne
-    @JoinColumn()
-    @JsonIgnore
+    @JoinColumn
     private Book book;
-
 }
+

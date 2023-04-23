@@ -30,6 +30,10 @@ public class BookController {
         List<Book> books = bookRepository.findAll();
         return ResponseEntity.ok(books);
     }
+    @GetMapping("/{bookId}")
+    public ResponseEntity<Book> getId(@PathVariable Long bookId){
+        return ResponseEntity.ok(bookRepository.findBookById(bookId));
+    }
     @PostMapping("/add")
     public ResponseEntity<BookResponse> addBook(@RequestParam("model") String jsonObject, @RequestParam("file") MultipartFile file) throws IOException {
             return ResponseEntity.ok(bookService.addBook(jsonObject, file));

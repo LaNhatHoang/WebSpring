@@ -27,13 +27,14 @@ public class BookService {
         Book book = objectMapper.readValue(jsonObject, Book.class);
         Book b = bookRepository.findByName(book.getName());
         if(b!=null && b.getName().equals(book.getName()) && b.getAuthor().equals(book.getAuthor())) {
-            return BookResponse.builder().status(false).message("Book is exits").build();
+            return BookResponse.builder().status(false).message("Sách đã tồn tại").build();
         }
         FileResponse fileResponse = fileService.storageFile(file);
         if(fileResponse.isStatus()){
             book.setUrlImage(fileResponse.getNameImage());
+            book.setSold(0L);
             bookRepository.save(book);
-            return BookResponse.builder().status(true).message("Add book success").build();
+            return BookResponse.builder().status(true).message("Thêm sách thành công").build();
         }
         return BookResponse.builder().status(false).message(fileResponse.getMessage()).build();
     }
@@ -69,6 +70,6 @@ public class BookService {
 
     public BookResponse deleteBook(Long id){
         bookRepository.deleteById(id);
-        return BookResponse.builder().status(true).message("Delete book success").build();
+        return BookResponse.builder().status(true).message("Xóa thành công").build();
     }
 }

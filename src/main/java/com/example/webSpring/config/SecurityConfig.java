@@ -21,11 +21,6 @@ public class SecurityConfig {
             "/api/v1/book/add",
             "/api/v1/book/delete/**"
     };
-    private static final String[] USER_URLs = {
-            "/api/v1/book/all",
-            "/books/all",
-            "/books/book/{id}",
-    };
     private static final String[] PERMIT_URLs = {
             "/",
             "/api/v1/auth/register",
@@ -42,9 +37,6 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
             .authorizeHttpRequests()
             .requestMatchers(PERMIT_URLs).permitAll()
-            .and()
-            .authorizeHttpRequests()
-            .requestMatchers(USER_URLs).hasAnyAuthority("USER","ADMIN")
             .and()
             .authorizeHttpRequests()
             .requestMatchers(ADMIN_URLs).hasAuthority("ADMIN")

@@ -1,5 +1,6 @@
 package com.example.webSpring.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -20,8 +22,7 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String email;
     private String password;
     private String role;
@@ -36,7 +37,12 @@ public class User implements UserDetails {
     private RefreshToken refreshToken;
 
     @OneToMany(mappedBy = "user")
-    private List<Review> reviews;
+    @JsonIgnore
+    private Set<Review> reviews;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<BuyBook> buyBooks;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

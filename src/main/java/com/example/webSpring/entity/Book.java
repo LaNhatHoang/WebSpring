@@ -24,10 +24,14 @@ public class Book {
     private Date releaseDate;
     private int numberPage;
     private String category;
-    private int sold;
+    private Long sold;
     private String urlImage;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book",cascade = CascadeType.REMOVE)
     @JsonIgnore
-    private List<Review> reviews;
+    private Set<Review> reviews;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<BuyBook> buyBooks;
 }
