@@ -35,11 +35,14 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final int MAX_FAILED_LOGIN = 5;
     private final long TIME_LOCK = 5 * 60 * 1000;
-    private static final Long EXPIRED_ACCESS_TIME = 1 * 60 * 60 * 1000L;
+    private static final Long EXPIRED_ACCESS_TIME = 24 * 60 * 60 * 1000L;
     private static final Long EXPIRED_REFRESH_TIME = 6 * 2592000000L;
     private static final int MAX_AGE_COOKIE = 6 * 30 * 24 * 60 * 60;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if(request.getEmail() == null || request.getEmail().equals("") || request.getPassword() == null || request.getPassword().equals("")){
+            return AuthenticationResponse.builder().status(false).message("Thông tin đăng ký không hợp lệ !").build();
+        }
         User theUser = userRepository.findByEmail(request.getEmail());
         if (theUser != null){
             return AuthenticationResponse
